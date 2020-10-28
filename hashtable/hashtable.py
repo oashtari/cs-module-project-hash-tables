@@ -1,3 +1,29 @@
+# Task: Implement a basic hash table without collision resolution.
+
+# 2. Implement a good hashing function.
+
+#    Recommend either of:
+
+#    * DJB2
+#    * FNV-1 (64-bit)
+
+#    You are allowed to Google for these hashing functions and implement
+#    from psuedocode.
+
+# 3. Implement the `hash_index()` that returns an index value for a key.
+
+# 4. Implement the `put()`, `get()`, and `delete()` methods.
+
+# You can test this with:
+
+# ```
+# python test_hashtable_no_collisions.py
+# ```
+
+# The above test program is _unlikely_ to have collisions, but it's
+# certainly possible for various hashing functions. With DJB2 (32 bit) and
+# FNV-1 (64 bit) hashing functions, there are no collisions.
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -6,6 +32,7 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
+
 
 
 # Hash table can't have fewer than this many slots
@@ -22,6 +49,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+
 
 
     def get_num_slots(self):
@@ -63,7 +92,16 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for c in key:
+            hash = (hash * 33) + ord(c)
+        return hash
 
+# def djb2(key):
+#   hash = 5381
+#   for c in key:
+#     hash = (hash * 33) + ord(c)
+#   return hash
 
     def hash_index(self, key):
         """
@@ -104,6 +142,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.
 
 
     def resize(self, new_capacity):
@@ -151,3 +190,17 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
+
+
+def hash_fn(str):
+    print(str)
+    encoded_string = str.encode()
+    print(encoded_string)
+    for char in str:
+        print(char)
+
+    result = 0
+    for byte_char in encoded_string:
+        print(byte_char)
+        result += byte_char
+    return result 
