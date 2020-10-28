@@ -1,29 +1,3 @@
-# Task: Implement a basic hash table without collision resolution.
-
-# 2. Implement a good hashing function.
-
-#    Recommend either of:
-
-#    * DJB2
-#    * FNV-1 (64-bit)
-
-#    You are allowed to Google for these hashing functions and implement
-#    from psuedocode.
-
-# 3. Implement the `hash_index()` that returns an index value for a key.
-
-# 4. Implement the `put()`, `get()`, and `delete()` methods.
-
-# You can test this with:
-
-# ```
-# python test_hashtable_no_collisions.py
-# ```
-
-# The above test program is _unlikely_ to have collisions, but it's
-# certainly possible for various hashing functions. With DJB2 (32 bit) and
-# FNV-1 (64 bit) hashing functions, there are no collisions.
-
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -32,7 +6,6 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
-
 
 
 # Hash table can't have fewer than this many slots
@@ -50,39 +23,40 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = capacity
+        self.storage = [None] * capacity
+        # self.load = 0
+        # self.min_size = capacity * 2
+
+#     def get_num_slots(self):
+#         """
+#         Return the length of the list you're using to hold the hash
+#         table data. (Not the number of items stored in the hash table,
+#         but the number of slots in the main list.)
+
+#         One of the tests relies on this.
+
+#         Implement this.
+#         """
+#         # Your code here
 
 
+#     def get_load_factor(self):
+#         """
+#         Return the load factor for this hash table.
 
-    def get_num_slots(self):
-        """
-        Return the length of the list you're using to hold the hash
-        table data. (Not the number of items stored in the hash table,
-        but the number of slots in the main list.)
-
-        One of the tests relies on this.
-
-        Implement this.
-        """
-        # Your code here
+#         Implement this.
+#         """
+#         # Your code here
 
 
-    def get_load_factor(self):
-        """
-        Return the load factor for this hash table.
+#     def fnv1(self, key):
+#         """
+#         FNV-1 Hash, 64-bit
 
-        Implement this.
-        """
-        # Your code here
+#         Implement this, and/or DJB2.
+#         """
 
-
-    def fnv1(self, key):
-        """
-        FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
-        """
-
-        # Your code here
+#         # Your code here
 
 
     def djb2(self, key):
@@ -92,16 +66,37 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        key_bytes = key.encode()
         hash = 5381
-        for c in key:
-            hash = (hash * 33) + ord(c)
+        for key_byte in key_bytes:
+            hash = hash * 33 + key_byte
+            hash &= 0xffffffff
         return hash
 
-# def djb2(key):
-#   hash = 5381
-#   for c in key:
-#     hash = (hash * 33) + ord(c)
-#   return hash
+    # def djb2(self, key):
+    #     """
+    #     DJB2 32-bit hash function
+    #     Implement this, and/or FNV-1.
+    #     """
+    #     key_bytes = key.encode()
+    #     hash = 5381
+    #     for k_byte in key_bytes:
+    #         hash = hash * 33 + k_byte
+    #         hash &= 0xffffffff
+    #     return hash
+#         # key_bytes = key.encode()
+#         # hash = 5381
+#         # for k_byte in key_bytes:
+#         #     hash = hash * 33 + k_byte
+#         #     hash &= 0xffffffff
+#         # return hash
+
+#     # EXTRA HASH
+    # def _hash(self,key):
+    #     hash = 51020
+    #     for x in key:
+    #         hash = (hash * 33) + ord(x)
+    #     return hash
 
     def hash_index(self, key):
         """
@@ -110,6 +105,7 @@ class HashTable:
         """
         #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
+        # return self._hash(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -120,6 +116,20 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        key_index = self.hash_index(key)
+        print('the key index:', key_index)
+        print('the new line', value)
+
+        # if self.storage[key_index] != None:
+        #     print(f"Collision at {repr(self.storage[key_index])}" )
+        self.storage[key_index] = value
+        print('whole storage', self.storage)
+        # self.storage[key_index] = HashTableEntry(key,value)
+
+    # def put(self, key, value):
+       
+    #     key_index = self.hash_index(key)
+    #     # cur_node = self.storage[key_index]
 
 
     def delete(self, key):
@@ -131,6 +141,16 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        key_index = self.hash_index(key)
+
+        if self.storage[key_index] == None:
+            print(f"did not find such a key")
+        else:
+            deleted_key = self.storage[key_index]
+            self.storage[key_index] = None
+
+            return deleted_key
+
 
 
     def get(self, key):
@@ -142,17 +162,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        self.
+        key_index = self.hash_index(key)
+        print('GET index:', key_index)
+        print('GET return', self.storage[key_index])
+        return self.storage[key_index]
 
 
-    def resize(self, new_capacity):
-        """
-        Changes the capacity of the hash table and
-        rehashes all key/value pairs.
 
-        Implement this.
-        """
-        # Your code here
+#     def resize(self, new_capacity):
+#         """
+#         Changes the capacity of the hash table and
+#         rehashes all key/value pairs.
+
+#         Implement this.
+#         """
+#         # Your code here
 
 
 
@@ -179,15 +203,15 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     # Test resizing
-    old_capacity = ht.get_num_slots()
-    ht.resize(ht.capacity * 2)
-    new_capacity = ht.get_num_slots()
+    # old_capacity = ht.get_num_slots()
+    # ht.resize(ht.capacity * 2)
+    # new_capacity = ht.get_num_slots()
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    # Test if data intact after resizing
-    for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+    # # Test if data intact after resizing
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
 
     print("")
 
@@ -204,3 +228,9 @@ def hash_fn(str):
         print(byte_char)
         result += byte_char
     return result 
+
+
+
+
+
+
