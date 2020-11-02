@@ -39,8 +39,6 @@ class HashTable:
         """
         # Your code here
         return self.capacity
-        
-
 
     def get_load_factor(self):
         """
@@ -50,7 +48,6 @@ class HashTable:
         """
         # Your code here
         return self.load / self.capacity
-
 
     def fnv1(self, key):
         """
@@ -69,7 +66,6 @@ class HashTable:
             hash = hash * FNV_prime
             hash = hash ^ ord(byte_of_data)
         return hash
-
 
     def djb2(self, key):
         """
@@ -136,8 +132,6 @@ class HashTable:
         self.load += 1        
 
         key_index = self.hash_index(key)
-        # print('the key index:', key_index)
-        # print('the new line', value)
         cur_node = self.storage[key_index]
         # print('CURRENT', cur_node)
         # print('current node key', cur_node.key)
@@ -145,25 +139,26 @@ class HashTable:
 
         if not cur_node:
             self.storage[key_index] = HashTableEntry(key,value)
-            # if self.get_load_factor() > .7:
-            #     self.resize(self.capacity * 2)
-            # return
+            if self.get_load_factor() > 0.7:
+                self.resize(self.capacity * 2)
+            return
         
         while cur_node:
             if cur_node.key == key:
                 cur_node.value = value
-                if self.get_load_factor() > .7:
+                if self.get_load_factor() > 0.7:
                     self.resize(self.capacity * 2)
                 return
             elif not cur_node.next:
                 cur_node.next = HashTableEntry(key,value)
-                if self.get_load_factor() > .7:
+                if self.get_load_factor() > 0.7:
                     self.resize(self.capacity * 2)
                 return
             else:
                 cur_node = cur_node.next
         
-        
+        # A DIFFERENT ATTEMPT
+
         # while cur_node is not None:
         #     if cur_node.key == key:
         #         cur_node.value = value
@@ -176,17 +171,12 @@ class HashTable:
         # if self.get_load_factor() > 0.75:
         #     self.resize(self.capacity * 2)
 
+        # pre LL code
         # if self.storage[key_index] != None:
         #     print(f"Collision at {repr(self.storage[key_index])}" )
         # self.storage[key_index] = value
         # print('whole storage', self.storage)
         # self.storage[key_index] = HashTableEntry(key,value)
-
-    # def put(self, key, value):
-       
-    #     key_index = self.hash_index(key)
-    #     # cur_node = self.storage[key_index]
-
 
     def delete(self, key):
         """
@@ -201,13 +191,14 @@ class HashTable:
 
         cur_node = self.storage[key_index]
 
-        self.load -= 1
+
 
         if cur_node.key == key:
             self.storage[key_index] = cur_node.next
             cur_node.next = None
-            if self.get_load_factor() < .2:
-                self.resize(self.capacity / 2)
+            self.load -= 1
+            if self.get_load_factor() < 0.2:
+                self.resize(self.capacity // 2)
             return
 
         while cur_node.next:
@@ -215,10 +206,11 @@ class HashTable:
                 deleted_node = cur_node.next
                 cur_node.next = deleted_node.next 
                 deleted_node.next = None
-                print('DELETED KEY', deleted_node.key)
-                print('deleted value', deleted_node.value)
-                if self.get_load_factor() < .2:
-                    self.resize(self.capacity / 2)
+                self.load -= 1
+                # print('DELETED KEY', deleted_node.key)
+                # print('deleted value', deleted_node.value)
+                if self.get_load_factor() < 0.2:
+                    self.resize(self.capacity // 2)
                 return 
             else:
                 cur_node = cur_node.next
@@ -265,9 +257,6 @@ class HashTable:
         """
         # Your code here
         key_index = self.hash_index(key)
-        # print('GET index:', key_index)
-        # print('GET return', self.storage[key_index])
-        # return self.storage[key_index]
         cur_node = self.storage[key_index]
         # print('GET NODE KEY', cur_node.key)
         # print('GET NODE VALUE', cur_node.value)
@@ -290,6 +279,17 @@ class HashTable:
         Implement this.
         """
         # Your code here
+
+        resized_table = HashTable(new_capacity)
+        for item in self.storage:
+            cur_node = item
+            while cur_node:
+                resized_table.put(cur_node.key, cur_node.value)
+                cur_node = cur_node.next 
+        self.capacity = new_capacity
+        self.load = resized_table.load
+        self.storage = resized_table.storage
+        del resized_table
 
 
 
