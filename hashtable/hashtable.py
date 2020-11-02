@@ -38,6 +38,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
         
 
 
@@ -48,6 +49,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.load / self.capacity
 
 
     def fnv1(self, key):
@@ -59,15 +61,14 @@ class HashTable:
 
         # Your code here
 
-        # def fnv1(self, key):
-        # self.key = key
-        # FNV_offset_basis = 14695981039346656037
-        # FNV_prime = 1099511628211
-        # hash = FNV_offset_basis
-        # for byte_of_data in key:
-        #     hash = hash * FNV_prime
-        #     hash = hash ^ ord(byte_of_data)
-        # return hash
+        self.key = key
+        FNV_offset_basis = 14695981039346656037
+        FNV_prime = 1099511628211
+        hash = FNV_offset_basis
+        for byte_of_data in key:
+            hash = hash * FNV_prime
+            hash = hash ^ ord(byte_of_data)
+        return hash
 
 
     def djb2(self, key):
@@ -95,14 +96,17 @@ class HashTable:
     #         hash = hash * 33 + k_byte
     #         hash &= 0xffffffff
     #     return hash
-#         # key_bytes = key.encode()
-#         # hash = 5381
-#         # for k_byte in key_bytes:
-#         #     hash = hash * 33 + k_byte
-#         #     hash &= 0xffffffff
-#         # return hash
 
-#     # EXTRA HASH
+
+    #         # key_bytes = key.encode()
+    #         # hash = 5381
+    #         # for k_byte in key_bytes:
+    #         #     hash = hash * 33 + k_byte
+    #         #     hash &= 0xffffffff
+    #         # return hash
+
+
+    #     # EXTRA HASH
     # def _hash(self,key):
     #     hash = 51020
     #     for x in key:
@@ -180,14 +184,14 @@ class HashTable:
 
 
 
-#     def resize(self, new_capacity):
-#         """
-#         Changes the capacity of the hash table and
-#         rehashes all key/value pairs.
+    def resize(self, new_capacity):
+        """
+        Changes the capacity of the hash table and
+        rehashes all key/value pairs.
 
-#         Implement this.
-#         """
-#         # Your code here
+        Implement this.
+        """
+        # Your code here
 
 
 
@@ -213,16 +217,16 @@ if __name__ == "__main__":
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
 
-    # Test resizing
-    # old_capacity = ht.get_num_slots()
-    # ht.resize(ht.capacity * 2)
-    # new_capacity = ht.get_num_slots()
+    Test resizing
+    old_capacity = ht.get_num_slots()
+    ht.resize(ht.capacity * 2)
+    new_capacity = ht.get_num_slots()
 
-    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    # # Test if data intact after resizing
-    # for i in range(1, 13):
-    #     print(ht.get(f"line_{i}"))
+    # Test if data intact after resizing
+    for i in range(1, 13):
+        print(ht.get(f"line_{i}"))
 
     print("")
 
