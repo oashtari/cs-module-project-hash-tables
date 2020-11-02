@@ -131,14 +131,56 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        
+        # increase load
+        self.load += 1        
+
         key_index = self.hash_index(key)
-        print('the key index:', key_index)
-        print('the new line', value)
+        # print('the key index:', key_index)
+        # print('the new line', value)
+        cur_node = self.storage[key_index]
+        print('CURRENT', cur_node)
+        # print('current node key', cur_node.key)
+        # print('current node value', cur_node.value)
+
+        if not cur_node:
+            self.storage[key_index] = HashTableEntry(key,value)
+            if self.get_load_factor() > .7:
+                self.resize(self.capacity * 2)
+            return
+        
+        while cur_node:
+            if cur_node.key == key:
+                cur_node.value = value
+                if self.get_load_factor() > .7:
+                    self.resize(self.capacity * 2)
+                return
+            elif not cur_node.next:
+                cur_node.next = HashTableEntry(key,value)
+                if self.get_load_factor() > .7:
+                    self.resize(self.capacity * 2)
+                return
+            else:
+                cur_node = cur_node.next
+        
+        
+        # while cur_node is not None:
+        #     if cur_node.key == key:
+        #         cur_node.value = value
+        #         return
+        #     cur_node = cur_node.next 
+        # self.load += 1
+        # new_node = HashTableEntry(key,value)
+        # new_node.next = self.storage[key_index]
+        # self.storage[key_index] = new_node
+
+        # if self.get_load_factor() > 0.75:
+        #     self.resize(self.capacity * 2)
 
         # if self.storage[key_index] != None:
         #     print(f"Collision at {repr(self.storage[key_index])}" )
-        self.storage[key_index] = value
-        print('whole storage', self.storage)
+        # self.storage[key_index] = value
+        # print('whole storage', self.storage)
         # self.storage[key_index] = HashTableEntry(key,value)
 
     # def put(self, key, value):
@@ -178,9 +220,22 @@ class HashTable:
         """
         # Your code here
         key_index = self.hash_index(key)
-        print('GET index:', key_index)
-        print('GET return', self.storage[key_index])
-        return self.storage[key_index]
+        # print('GET index:', key_index)
+        # print('GET return', self.storage[key_index])
+        # return self.storage[key_index]
+        cur_node = self.storage[key_index]
+        print('GET NODE KEY', cur_node.key)
+        print('GET NODE VALUE', cur_node.value)
+
+        while cur_node:
+            if cur_node.key == key:
+                return cur_node.value
+
+            else:
+                cur_node = cur_node.next
+        return cur_node
+
+
 
 
 
@@ -215,18 +270,18 @@ if __name__ == "__main__":
 
     # Test storing beyond capacity
     for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+        print('TEST PRINT', ht.get(f"line_{i}"))
 
-    Test resizing
-    old_capacity = ht.get_num_slots()
-    ht.resize(ht.capacity * 2)
-    new_capacity = ht.get_num_slots()
+    # Test resizing
+    # old_capacity = ht.get_num_slots()
+    # ht.resize(ht.capacity * 2)
+    # new_capacity = ht.get_num_slots()
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    # Test if data intact after resizing
-    for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+    # # Test if data intact after resizing
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
 
     print("")
 
