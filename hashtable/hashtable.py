@@ -139,15 +139,15 @@ class HashTable:
         # print('the key index:', key_index)
         # print('the new line', value)
         cur_node = self.storage[key_index]
-        print('CURRENT', cur_node)
+        # print('CURRENT', cur_node)
         # print('current node key', cur_node.key)
         # print('current node value', cur_node.value)
 
         if not cur_node:
             self.storage[key_index] = HashTableEntry(key,value)
-            if self.get_load_factor() > .7:
-                self.resize(self.capacity * 2)
-            return
+            # if self.get_load_factor() > .7:
+            #     self.resize(self.capacity * 2)
+            # return
         
         while cur_node:
             if cur_node.key == key:
@@ -169,7 +169,6 @@ class HashTable:
         #         cur_node.value = value
         #         return
         #     cur_node = cur_node.next 
-        # self.load += 1
         # new_node = HashTableEntry(key,value)
         # new_node.next = self.storage[key_index]
         # self.storage[key_index] = new_node
@@ -200,13 +199,59 @@ class HashTable:
         # Your code here
         key_index = self.hash_index(key)
 
-        if self.storage[key_index] == None:
-            print(f"did not find such a key")
-        else:
-            deleted_key = self.storage[key_index]
-            self.storage[key_index] = None
+        cur_node = self.storage[key_index]
 
-            return deleted_key
+        self.load -= 1
+
+        if cur_node.key == key:
+            self.storage[key_index] = cur_node.next
+            cur_node.next = None
+            if self.get_load_factor() < .2:
+                self.resize(self.capacity / 2)
+            return
+
+        while cur_node.next:
+            if cur_node.next.key == key:
+                deleted_node = cur_node.next
+                cur_node.next = deleted_node.next 
+                deleted_node.next = None
+                print('DELETED KEY', deleted_node.key)
+                print('deleted value', deleted_node.value)
+                if self.get_load_factor() < .2:
+                    self.resize(self.capacity / 2)
+                return 
+            else:
+                cur_node = cur_node.next
+        return(print('key not found'))
+
+        # if self.storage[key_index] is not None:
+        #     self.load -=1
+        #     cur_node = self.storage[key_index]
+        #     if cur_node.key == key:
+        #         self.storage[key_index] = cur_node.next 
+        #         if self.get_load_factor() < 0.2:
+        #             self.resize(self.capacity/2)
+        #         return
+        #     while cur_node.next is not None:
+        #         if cur_node.next.key == key:
+        #             self.load -=1
+        #             cur_node.ext = cur_node.next.next
+        #             if self.get_load_factor() < 0.2:
+        #                 self.resize(self.capacity/2)
+        #             return
+        #         cur_node = cur_node.next
+        #     print('no such key')
+        #     return
+
+
+    # pre LL code
+        # if self.storage[key_index] == None:
+        #     print(f"did not find such a key")
+        # else:
+        #     deleted_key = self.storage[key_index]
+        #     self.storage[key_index] = None
+
+        #     return deleted_key
 
 
 
@@ -224,15 +269,13 @@ class HashTable:
         # print('GET return', self.storage[key_index])
         # return self.storage[key_index]
         cur_node = self.storage[key_index]
-        print('GET NODE KEY', cur_node.key)
-        print('GET NODE VALUE', cur_node.value)
+        # print('GET NODE KEY', cur_node.key)
+        # print('GET NODE VALUE', cur_node.value)
 
         while cur_node:
             if cur_node.key == key:
                 return cur_node.value
-
-            else:
-                cur_node = cur_node.next
+            cur_node = cur_node.next
         return cur_node
 
 
