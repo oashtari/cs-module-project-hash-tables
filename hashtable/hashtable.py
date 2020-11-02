@@ -24,39 +24,50 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.storage = [None] * capacity
-        # self.load = 0
-        # self.min_size = capacity * 2
+        self.load = 0
+        self.min_size = capacity * 2
 
-#     def get_num_slots(self):
-#         """
-#         Return the length of the list you're using to hold the hash
-#         table data. (Not the number of items stored in the hash table,
-#         but the number of slots in the main list.)
+    def get_num_slots(self):
+        """
+        Return the length of the list you're using to hold the hash
+        table data. (Not the number of items stored in the hash table,
+        but the number of slots in the main list.)
 
-#         One of the tests relies on this.
+        One of the tests relies on this.
 
-#         Implement this.
-#         """
-#         # Your code here
-
-
-#     def get_load_factor(self):
-#         """
-#         Return the load factor for this hash table.
-
-#         Implement this.
-#         """
-#         # Your code here
+        Implement this.
+        """
+        # Your code here
+        
 
 
-#     def fnv1(self, key):
-#         """
-#         FNV-1 Hash, 64-bit
+    def get_load_factor(self):
+        """
+        Return the load factor for this hash table.
 
-#         Implement this, and/or DJB2.
-#         """
+        Implement this.
+        """
+        # Your code here
 
-#         # Your code here
+
+    def fnv1(self, key):
+        """
+        FNV-1 Hash, 64-bit
+
+        Implement this, and/or DJB2.
+        """
+
+        # Your code here
+
+        # def fnv1(self, key):
+        # self.key = key
+        # FNV_offset_basis = 14695981039346656037
+        # FNV_prime = 1099511628211
+        # hash = FNV_offset_basis
+        # for byte_of_data in key:
+        #     hash = hash * FNV_prime
+        #     hash = hash ^ ord(byte_of_data)
+        # return hash
 
 
     def djb2(self, key):
