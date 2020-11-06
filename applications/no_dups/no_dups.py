@@ -1,5 +1,24 @@
 def no_dups(s):
     # Your code here
+    dups = {}
+
+    words = s.split(' ')
+    # print('words', words)
+
+    if s == '':
+        return s
+
+    for word in words:
+        if word not in dups:
+            dups[word] = 0
+        dups[word] +=1 
+
+    dups = dups.keys()
+
+    final = ' '
+
+    return (final.join(dups))
+
 
 
 
